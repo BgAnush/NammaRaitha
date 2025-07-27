@@ -18,7 +18,7 @@ export default function Signup() {
   const [password, setPassword] = useState('');
 
   // ✅ Backend Render API endpoint
-  const BACKEND_URL = 'https://nammaraitha-api.onrender.com/api/users';
+  const BACKEND_URL = 'http://192.168.31.63:8080/api/users';
 
   const handleSignup = async () => {
     if (!name || !email || !password) {

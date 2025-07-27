@@ -1,12 +1,17 @@
-import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
 
-export default function Index() {
-  const router = useRouter();
+export default function Page() {
+  const [fontsLoaded] = useFonts({
+    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
+  });
 
   useEffect(() => {
-    router.replace('/splash'); // Redirect immediately to splash screen
-  }, []);
+    if (fontsLoaded) {
+      router.replace('/splash');
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
 
   return null;
 }

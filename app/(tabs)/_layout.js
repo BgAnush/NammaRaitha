@@ -1,4 +1,3 @@
-// app/_layout.js or app/layout.js (depends on expo-router version)
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
@@ -9,7 +8,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   const [fontsLoaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'), // Correct relative path
   });
 
   if (!fontsLoaded) {
