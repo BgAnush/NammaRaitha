@@ -16,7 +16,7 @@ export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const BACKEND_URL = 'https://nammaraitha.onrender.com/'; // 🔁 Your Render API URL
+  const BACKEND_URL = 'https://nammaraitha-api.onrender.com/signup'; // 🔁 Your Render API URL
 
   const handleSignup = async () => {
     if (!name || !email || !password) {
