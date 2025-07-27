@@ -1,12 +1,22 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 
 export default function Signup() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const BACKEND_URL = 'https://nammaraitha.onrender.com/'; // 🔁 Your Render API URL
 
   const handleSignup = async () => {
     if (!name || !email || !password) {
@@ -15,35 +25,32 @@ export default function Signup() {
     }
 
     try {
-      const response = await fetch('https://nammaraitha-api.onrender.com/signup', {
+      const response = await fetch(`${BACKEND_URL}/signup`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ name, email, password }),
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
-      }
-
       const data = await response.json();
 
-      if (data.success || response.status === 200) {
+      if (response.ok && data.success !== false) {
         Alert.alert('Success', 'Signup successful!', [
           { text: 'OK', onPress: () => router.replace('/login') },
         ]);
       } else {
-        Alert.alert('Signup Failed', data.message || 'Please try again.');
+        Alert.alert('Signup Failed', data.message || 'Email may already exist.');
       }
     } catch (error) {
-      console.error('Signup error:', error.message);
-      Alert.alert('Network Error', 'Could not connect to server.');
+      console.error('Signup Error:', error);
+      Alert.alert('Error', 'Could not connect to server.');
     }
   };
 
   return (
     <ImageBackground
-      source={require('../assets/images/signup-bg.jpeg')}
+      source={require('../assets/images/signup-bg.jpeg')} // ✅ Place an image here or use a color
       style={styles.background}
       resizeMode="cover"
     >
@@ -54,25 +61,25 @@ export default function Signup() {
           <TextInput
             style={styles.input}
             placeholder="Full Name"
-            placeholderTextColor="#ddd"
+            placeholderTextColor="#ccc"
             onChangeText={setName}
             value={name}
           />
           <TextInput
             style={styles.input}
             placeholder="Email"
-            placeholderTextColor="#ddd"
+            placeholderTextColor="#ccc"
+            keyboardType="email-address"
             onChangeText={setEmail}
             value={email}
-            keyboardType="email-address"
           />
           <TextInput
             style={styles.input}
             placeholder="Password"
-            placeholderTextColor="#ddd"
+            placeholderTextColor="#ccc"
+            secureTextEntry
             onChangeText={setPassword}
             value={password}
-            secureTextEntry
           />
 
           <TouchableOpacity style={styles.button} onPress={handleSignup}>
@@ -85,33 +92,31 @@ export default function Signup() {
 }
 
 const styles = StyleSheet.create({
-  background: { flex: 1, justifyContent: 'center' },
+  background: {
+    flex: 1,
+    justifyContent: 'center',
+  },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   formContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    backgroundColor: 'rgba(255,255,255,0.15)',
     padding: 25,
     borderRadius: 20,
     width: '85%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 10,
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     color: '#fff',
     marginBottom: 20,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   input: {
-    height: 50,
+    height: 48,
     borderColor: '#fff',
     borderWidth: 1,
     borderRadius: 10,
@@ -128,6 +133,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     fontWeight: '600',
-    fontSize: 18,
+    fontSize: 16,
   },
 });
