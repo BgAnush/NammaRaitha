@@ -7,16 +7,18 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 
 export default function Signup() {
   const router = useRouter();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const BACKEND_URL = 'https://nammaraitha-api.onrender.com/signup'; // 🔁 Your Render API URL
+  // ✅ Backend Render API endpoint
+  const BACKEND_URL = 'https://nammaraitha-api.onrender.com/api/users';
 
   const handleSignup = async () => {
     if (!name || !email || !password) {
@@ -40,7 +42,7 @@ export default function Signup() {
           { text: 'OK', onPress: () => router.replace('/login') },
         ]);
       } else {
-        Alert.alert('Signup Failed', data.message || 'Email may already exist.');
+        Alert.alert('Signup Failed', data.message || 'Email already exists.');
       }
     } catch (error) {
       console.error('Signup Error:', error);
@@ -50,7 +52,7 @@ export default function Signup() {
 
   return (
     <ImageBackground
-      source={require('../assets/images/signup-bg.jpeg')} // ✅ Place an image here or use a color
+      source={require('../assets/images/signup-bg.jpeg')} // ✅ Make sure this image exists
       style={styles.background}
       resizeMode="cover"
     >
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   formContainer: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(255,255,255,0.1)',
     padding: 25,
     borderRadius: 20,
     width: '85%',
