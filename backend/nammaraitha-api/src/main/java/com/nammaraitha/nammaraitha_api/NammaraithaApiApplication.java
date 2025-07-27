@@ -19,6 +19,6 @@ public class NammaraithaApiApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        userService.insertUsersWithDuplicateEmail();
+        userService.insertSampleUsersWithDuplicateEmail();
     }
 }

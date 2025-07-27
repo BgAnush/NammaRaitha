@@ -1,7 +1,6 @@
 package com.nammaraitha.nammaraitha_api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.nammaraitha.nammaraitha_api.model.User;
@@ -13,22 +12,25 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void insertUsersWithDuplicateEmail() {
+    public void insertSampleUsersWithDuplicateEmail() {
         User user1 = new User("Ravi", "ravi@example.com", "pass123", "Farmer");
-        User user2 = new User("Another Ravi", "ravi@example.com", "pass456", "Retailer"); // same email
+        User user2 = new User("Another Ravi", "ravi@example.com", "pass456", "Retailer"); // Duplicate email
 
-        try {
-            userRepository.save(user1);
-            System.out.println("✅ User1 saved");
-        } catch (Exception e) {
-            System.out.println("❌ Failed to save User1: " + e.getMessage());
+        saveUser(user1);
+        saveUser(user2);
+    }
+
+    private void saveUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            System.err.println("⚠️ User already exists: " + user.getEmail());
+            return;
         }
 
         try {
-            userRepository.save(user2); // this should fail
-            System.out.println("✅ User2 saved");
-        } catch (DataIntegrityViolationException e) {
-            System.out.println("❌ Duplicate email error for User2: " + e.getRootCause().getMessage());
+            userRepository.save(user);
+            System.out.println("✅ Saved: " + user.getName() + " (" + user.getEmail() + ")");
+        } catch (Exception e) {
+            System.err.println("❌ Failed to save user: " + user.getEmail() + " — " + e.getMessage());
         }
     }
 }
