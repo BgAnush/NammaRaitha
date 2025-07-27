@@ -1,24 +1,29 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Slot } from 'expo-router';
+import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'react-native';
+import 'react-native-reanimated';
+
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-
-  const [fontsLoaded] = useFonts({
+  const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  if (!fontsLoaded) {
-    return null; // You can also return a loading screen here
+  if (!loaded) {
+    // Async font loading only occurs in development.
+    return null;
   }
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
       <StatusBar style="auto" />
-      <Slot /> {/* Handles routing and layout automatically */}
     </ThemeProvider>
   );
 }
