@@ -12,25 +12,16 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void insertSampleUsersWithDuplicateEmail() {
-        User user1 = new User("Ravi", "ravi@example.com", "pass123", "Farmer");
-        User user2 = new User("Another Ravi", "ravi@example.com", "pass456", "Retailer"); // Duplicate email
-
-        saveUser(user1);
-        saveUser(user2);
-    }
-
-    private void saveUser(User user) {
+    public String registerUser(User user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            System.err.println("⚠️ User already exists: " + user.getEmail());
-            return;
+            return "⚠️ User already exists with email: " + user.getEmail();
         }
 
         try {
             userRepository.save(user);
-            System.out.println("✅ Saved: " + user.getName() + " (" + user.getEmail() + ")");
+            return "✅ User registered successfully: " + user.getName();
         } catch (Exception e) {
-            System.err.println("❌ Failed to save user: " + user.getEmail() + " — " + e.getMessage());
+            return "❌ Failed to register user: " + e.getMessage();
         }
     }
 }

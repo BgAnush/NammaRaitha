@@ -1,7 +1,7 @@
-// app/signup.js
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+
 export default function Signup() {
   const router = useRouter();
   const [name, setName] = useState('');
@@ -15,15 +15,20 @@ export default function Signup() {
     }
 
     try {
-      const response = await fetch('http://YOUR_SERVER_IP:8080/signup', {
+      const response = await fetch('https://nammaraitha-api.onrender.com/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
       });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+
       const data = await response.json();
 
-      if (data.success) {
+      if (data.success || response.status === 200) {
         Alert.alert('Success', 'Signup successful!', [
           { text: 'OK', onPress: () => router.replace('/login') },
         ]);
@@ -31,14 +36,14 @@ export default function Signup() {
         Alert.alert('Signup Failed', data.message || 'Please try again.');
       }
     } catch (error) {
-      console.error(error);
+      console.error('Signup error:', error.message);
       Alert.alert('Network Error', 'Could not connect to server.');
     }
   };
 
   return (
     <ImageBackground
-      source={require('../assets/images/signup-bg.jpeg')} // Add your image in assets folder
+      source={require('../assets/images/signup-bg.jpeg')}
       style={styles.background}
       resizeMode="cover"
     >
@@ -80,13 +85,10 @@ export default function Signup() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    justifyContent: 'center',
-  },
+  background: { flex: 1, justifyContent: 'center' },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Transparent overlay
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
     justifyContent: 'center',
     alignItems: 'center',
   },
