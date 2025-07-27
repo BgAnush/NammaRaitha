@@ -1,24 +1,19 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Slot } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'react-native';
+import { router } from 'expo-router';
+import { useEffect } from 'react';
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
+export default function Page() {
   const [fontsLoaded] = useFonts({
-    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'), // Correct relative path
+    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  useEffect(() => {
+    if (fontsLoaded) {
+      router.replace('/splash');
+    }
+  }, [fontsLoaded]);
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <StatusBar style="auto" />
-      <Slot />
-    </ThemeProvider>
-  );
+  if (!fontsLoaded) return null;
+
+  return null;
 }

@@ -1,17 +1,19 @@
-import { useFonts } from 'expo-font';
+import { router } from 'expo-router';
+import { useEffect } from 'react';
+import { Text, View } from 'react-native';
 
-export default function Page() {
-  const [fontsLoaded] = useFonts({
-    SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
+export default function IndexPage() {
   useEffect(() => {
-    if (fontsLoaded) {
-      router.replace('/splash');
-    }
-  }, [fontsLoaded]);
+    const timer = setTimeout(() => {
+      router.replace('/splash'); // or your login screen
+    }, 100); // Delay ensures layout is mounted
 
-  if (!fontsLoaded) return null;
+    return () => clearTimeout(timer);
+  }, []);
 
-  return null;
+  return (
+    <View>
+      <Text>Loading...</Text>
+    </View>
+  );
 }

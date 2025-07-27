@@ -13,16 +13,23 @@ import {
 export default function Signup() {
   const router = useRouter();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
 
-  // ✅ Backend Render API endpoint
-  const BACKEND_URL = 'http://192.168.31.63:8080/api/users';
+  const handleChange = (field, value) => {
+    setForm({ ...form, [field]: value });
+  };
+
+  const BACKEND_URL = 'http://192.168.31.63:8080/api/users'; // 🔁 Update with actual backend IP if needed
 
   const handleSignup = async () => {
+    const { name, email, password } = form;
+
     if (!name || !email || !password) {
-      Alert.alert('Missing Fields', 'Please fill in all fields.');
+      Alert.alert('Missing Information', 'Please fill out all fields.');
       return;
     }
 
@@ -32,60 +39,60 @@ export default function Signup() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify(form),
       });
 
-      const data = await response.json();
+      const result = await response.json();
 
-      if (response.ok && data.success !== false) {
+      if (response.ok && result.success !== false) {
         Alert.alert('Success', 'Signup successful!', [
           { text: 'OK', onPress: () => router.replace('/login') },
         ]);
       } else {
-        Alert.alert('Signup Failed', data.message || 'Email already exists.');
+        Alert.alert('Signup Failed', result.message || 'Try again later.');
       }
     } catch (error) {
       console.error('Signup Error:', error);
-      Alert.alert('Error', 'Could not connect to server.');
+      Alert.alert('Error', 'Server not reachable.');
     }
   };
 
   return (
     <ImageBackground
-      source={require('../assets/images/signup-bg.jpeg')} // ✅ Make sure this image exists
+      source={require('../assets/images/signup-bg.jpeg')} // ✅ Ensure this image exists
       style={styles.background}
       resizeMode="cover"
     >
       <View style={styles.overlay}>
-        <View style={styles.formContainer}>
-          <Text style={styles.title}>Sign Up</Text>
+        <View style={styles.form}>
+          <Text style={styles.heading}>Create Account</Text>
 
           <TextInput
             style={styles.input}
             placeholder="Full Name"
             placeholderTextColor="#ccc"
-            onChangeText={setName}
-            value={name}
+            value={form.name}
+            onChangeText={(val) => handleChange('name', val)}
           />
           <TextInput
             style={styles.input}
             placeholder="Email"
             placeholderTextColor="#ccc"
             keyboardType="email-address"
-            onChangeText={setEmail}
-            value={email}
+            value={form.email}
+            onChangeText={(val) => handleChange('email', val)}
           />
           <TextInput
             style={styles.input}
             placeholder="Password"
             placeholderTextColor="#ccc"
             secureTextEntry
-            onChangeText={setPassword}
-            value={password}
+            value={form.password}
+            onChangeText={(val) => handleChange('password', val)}
           />
 
           <TouchableOpacity style={styles.button} onPress={handleSignup}>
-            <Text style={styles.buttonText}>Register</Text>
+            <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -104,37 +111,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  formContainer: {
+  form: {
     backgroundColor: 'rgba(255,255,255,0.1)',
-    padding: 25,
+    padding: 24,
     borderRadius: 20,
     width: '85%',
   },
-  title: {
-    fontSize: 26,
+  heading: {
+    fontSize: 28,
     color: '#fff',
-    marginBottom: 20,
     textAlign: 'center',
     fontWeight: 'bold',
+    marginBottom: 24,
   },
   input: {
     height: 48,
     borderColor: '#fff',
     borderWidth: 1,
     borderRadius: 10,
-    paddingHorizontal: 15,
-    marginBottom: 15,
+    paddingHorizontal: 14,
+    marginBottom: 16,
     color: '#fff',
   },
   button: {
     backgroundColor: '#28a745',
     paddingVertical: 12,
     borderRadius: 10,
+    marginTop: 8,
   },
   buttonText: {
-    textAlign: 'center',
     color: '#fff',
     fontWeight: '600',
     fontSize: 16,
+    textAlign: 'center',
   },
 });
