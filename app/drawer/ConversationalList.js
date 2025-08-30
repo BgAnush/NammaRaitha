@@ -1,19 +1,19 @@
 // ConversationList.js
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  ActivityIndicator,
-  RefreshControl,
-} from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { supabase } from "../supabase/supabaseClient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { supabase } from "../supabase/supabaseClient";
 
 const PLACEHOLDER = "https://via.placeholder.com/60x60.png?text=No+Image";
 
